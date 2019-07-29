@@ -1,0 +1,27 @@
+{
+  "name": "frontend-cop",
+  "version": "1.0.0",
+  "description": "Check the browser for best practice violations",
+  "main": "dist/index.js",
+  "author": "Mike Wheeler",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack",
+    "test": "jest"
+  },
+  "dependencies": {
+    "debounce": "^1.2.0",
+    "preact": "^8.4.2",
+    "redux": "^4.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-loader": "^8.0.6",
+    "babel-preset-preact": "^2.0.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.18.2",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  }
+}
