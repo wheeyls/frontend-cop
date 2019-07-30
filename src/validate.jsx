@@ -1,5 +1,4 @@
 import debounce from 'debounce';
-import { waitForGlobal } from './waitForGlobal';
 import { h, render, Component } from 'preact';
 import { createStore } from 'redux';
 
@@ -13,7 +12,7 @@ function frontendApp(state, action) {
 
 const app = createStore(frontendApp);
 
-const style = `<style>
+const style = `
   .frontend-cop {
     background: white;
     position: fixed;
@@ -47,10 +46,12 @@ const style = `<style>
   .frontend-cop-violation {
     box-shadow: 0px 0px 0px 10px red;
   }
-</style>`;
+`;
 
-function createStyles($) {
-  $('head').append(style);
+function createStyles() {
+  const styleTag = document.createElement('style');
+  styleTag.innerHTML = style;
+  document.head.appendChild(styleTag);
 }
 
 function validateImgs(imgs) {
@@ -59,7 +60,7 @@ function validateImgs(imgs) {
       ' frontend-cop-violation frontend-cop-violation--img-size',
       ''
     );
-    if (!i.src.match(/\.svg/) && i.naturalWidth > i.clientWidth * 2) {
+    if (!i.src.match(/\.svg/) && i.clientWidth && i.naturalWidth > i.clientWidth * 2) {
       i.className += ' frontend-cop-violation frontend-cop-violation--img-size';
       return true;
     }
@@ -77,32 +78,8 @@ function validateAll(document, store = app) {
 }
 
 function watch(store = app) {
-  waitForGlobal('$', function($) {
-    list({ badImgs: validateAll(document), container: document.body });
-    createStyles($);
-    $(window).on(
-      'resize',
-      debounce(
-        () =>
-          store.dispatch({
-            type: 'INVALID_IMGS',
-            items: validateAll(document)
-          }),
-        1000
-      )
-    );
-    $(window).on(
-      'pjax:end',
-      debounce(
-        () =>
-          store.dispatch({
-            type: 'INVALID_IMGS',
-            items: validateAll(document)
-          }),
-        1000
-      )
-    );
-  });
+  list({ badImgs: validateAll(document), container: document.body });
+  createStyles();
 }
 
 class List extends Component {
@@ -156,7 +133,5 @@ function list({ badImgs, container, store = app } = {}) {
   let component = <List items={badImgs} store={store} />;
   return render(component, container);
 }
-
-function panel() {}
 
 export { validateImgs, validateAll, watch, list, app };

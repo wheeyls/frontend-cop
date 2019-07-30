@@ -1,4 +1,4 @@
-import { validateImgs, validateAll, list, app } from './validate.jsx';
+import { validateImgs, validateAll, list } from './validate.jsx';
 
 function img(opts = {}) {
   return Object.assign(
@@ -50,6 +50,12 @@ describe('validateImgs', () => {
 
   test('does not add error when naturalWidth is not available', () => {
     let i = img({ naturalWidth: undefined, clientWidth: 250 });
+    validateImgs([i]);
+    expect(i.className).toEqual('');
+  });
+
+  test('does not fail when clientWidth is not available', () => {
+    let i = img({ naturalWidth: 1000, clientWidth: 0 });
     validateImgs([i]);
     expect(i.className).toEqual('');
   });
