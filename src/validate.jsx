@@ -1,4 +1,3 @@
-import debounce from 'debounce';
 import { h, render, Component } from 'preact';
 import { createStore } from 'redux';
 
